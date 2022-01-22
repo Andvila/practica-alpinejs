@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>AlpineJS II</title>
+    <style>
+        .active {
+            background-color:  #D2AFFF;
+        }
+    </style>
+</head>
+<body>
+
+    <div x-data="main()" class="flex justify-center gap-6" x-init="getRandomColor()">
+        <div>
+            <div class="bg-blue-500 w-32 h-32 mt-2" x-text="actualColor"></div>
+            <button @click="getRandomColor()" class="mt-2 border-2 rounded-full p-2 bg-blue-900 text-white">Random Color</button>
+        </div> <!-- 1072612 -->
+        <div>
+            <!-- con x-bind puedes colocarle un valor a un atributo si se cumple la condicion -->
+            <div x-bind:class="{ 'active': cambio }" class="w-32 h-32 mt-2"></div>
+            <button @click="cambio = !cambio" class="mt-2 border-2 rounded-full p-2 bg-red-900 text-white">Colocar fondo</button>
+        </div>
+        <div>
+            <!-- tambien x-bind sirve para colocar un valor al atributo sin condicion -->
+            <div x-bind:class="colortw" x-text="colortw" class="w-32 h-32 mt-2"></div>
+            <!-- Se puede obtener el objeto del evento pasandolo como parametro -->
+            <button @click="cambiarBgTw(event)" class="mt-2 border-2 rounded-full p-2 bg-pink-900 text-white">Colocar fondo</button>
+        </div>
+        <div>
+            <div @mouseover="cambiarBg(event)" class="w-32 h-32 mt-2 text-center">Hover para cambiar de color</div>
+        </div>
+        <div class="flex flex-col items-center rounded">
+            <!-- De esta forma se puede especificar que el evento se activa cuando el usuario presiona enter -->
+            <div id="div-color" :style="`background-color:#D2AFFF;`" class="w-32 h-32 mt-2 text-center">Wololo</div>
+            <input type="text" x-on:keydown.enter="cambiarBgEnter(event)" class="mt-2" placeholder="Color en hexadecimal" >
+        </div>
+    </div>
+
+    <script>
+
+        const main = () => {
+            return {
+                colortw: 'bg-blue-500',
+                oldBgColor: 'bg-pink-500',
+                characters: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
+                                        'A', 'B', 'C', 'D', 'E', 'F'],
+                actualColor: null,
+                cambio: false,
+                twColors: ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 
+                    'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 
+                    'violet', 'pink', 'rose'],
+                twIntensities: ['50', '100', '200', '300', '400', '500', '600', '700', '800', '900'],
+                pickRandomCharacter: function() {
+                    const rand_position = Math.floor(Math.random()*this.characters.length);
+                    return this.characters[rand_position];
+                },
+                getRandomColor: function() {
+
+                    let colorResult = "#";
+
+                    for (let i = 0; i < 6; i++){
+                        colorResult += this.pickRandomCharacter();
+                    }
+
+                    this.actualColor = colorResult;
+                },
+                cambiarBgTw: function(event) {
+                    const rand_color_position = Math.floor(Math.random()*this.twColors.length);
+                    const rand_intensity_position = Math.floor(Math.random()*this.twIntensities.length);
+                    this.colortw = `bg-${this.twColors[rand_color_position]}-${this.twIntensities[rand_intensity_position]}`;
+                    console.log(event);
+                },
+                cambiarBg: function(event) {
+                    const rand_color_position = Math.floor(Math.random()*this.twColors.length);
+                    const rand_intensity_position = Math.floor(Math.random()*this.twIntensities.length);
+                    event.target.classList.remove(this.oldBgColor);
+                    oldBgColor = `bg-${this.twColors[rand_color_position]}-${this.twIntensities[rand_intensity_position]}`;
+                    event.target.classList.add(oldBgColor);
+                },
+                cambiarBgEnter: function(event) {
+                    div_color = document.getElementById('div-color');
+                    div_color.style.backgroundColor = event.target.value;
+                }
+
+            }
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Alpine IV</title>
+</head>
+<body>
+    <div x-data="main()">
+        <template x-if="open" >
+            <div>
+                <p>tempore asperiores culpa sint maiores illo a nam aliquam quod</p>
+                <p>Deserunt quae, fugit aut totam ex ipsa error eligendi quia facere pariatur</p>
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+            </div>
+        </template>
+
+        <div class="mt-4 bg-gray-200 inline-block p-4 ml-4">
+            <h3 x-text="producto.nombre"></h3>
+            <p x-text="producto.precio"></p>
+            <template x-if="producto.disponible">
+                <p class="bg-lime-500 text-white inline-block p-3">Disponible</p>
+            </template>
+            <template x-if="!producto.disponible">
+                <p class="bg-red-500 text-white inline-block p-3">No Disponible</p>
+            </template>
+        </div>
+
+        <div class="mt-3 bg-gray-200 p-2">
+            <ul>
+                <template x-for="animal in animales" :key="animal">
+                    <li x-text="animal"></li>
+                </template>
+            </ul>
+        </div>
+
+    </div>
+
+    <script>
+        const main = () => {
+            return {
+                open: true,
+                producto: {
+                    nombre: 'Macbook pro 13 pulgadas',
+                    precio: '1600$',
+                    disponible: true
+                },
+                animales: ['Perro', 'Gato', 'Oso', 'Ornitorrico']
+            };
+        };
+    </script>
+
+</body>
+</html>

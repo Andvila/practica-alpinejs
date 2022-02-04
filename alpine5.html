@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Alpine V</title>
+</head>
+
+<body>
+
+    <!-- Pruebas con x-effect -->
+    <!-- El x-effect solo se activa cuando se cambia el estado de la variable que esta referenciada
+     en este caso el data1 que esta en el console.log -->
+    <!-- El $watch() ejecuta la funcion del segundo parametro cuando hay un cambio en la variable especificada
+     en el primer parametro -->
+    <div x-data="main()" x-effect="console.log(data1)" x-init="$watch('data3', value => console.log(value))" class="p-3">
+        <div>
+            <button @click=" data1++ "
+                class="border border-blue-500 rounded bg-blue-200 text-white hover:bg-blue-600 p-2 font-bold">
+                ++
+            </button>
+            <button @click="data2 += 1"
+                class="border border-pink-500 rounded bg-pink-200 text-white hover:bg-pink-600 p-2 font-bold">
+                +=1
+            </button>
+            <button @click="data3 += '*'"
+                class="border border-orange-500 rounded bg-orange-200 text-white hover:bg-orange-600 p-2 font-bold">
+                +=*
+            </button>
+            <p x-text="data1"></p>
+            <p x-text="data2"></p>
+            <p x-text="data3"></p>
+        </div>
+        <div class="mt-5">
+            <input type="text" x-ref="content" class="border border-gray-200">
+            <button x-on:click="navigator.clipboard.writeText($refs.content.value)" class="border border-red-600 bg-red-200 hover:bg-red-600 text-white px-2 py-1 font-bold rounded">
+                Copy
+            </button>
+        </div>
+    </div>
+
+    <script>
+
+        /* Forma de inicializar los componentes de acuerdo a la documentacion */
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('main', () => ({
+                data1: 1,
+                data2: '1',
+                data3: '*'
+            }))
+        })
+
+    </script>
+
+</body>
+
+</html>

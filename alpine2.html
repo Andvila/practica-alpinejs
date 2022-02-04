@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//unpkg.com/alpinejs" defer></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,11 +14,11 @@
 </head>
 <body>
 
-    <div x-data="main()" class="flex justify-center gap-6" x-init="getRandomColor()">
+    <div x-data="main()" class="grid grid-cols-4 justify-items-center gap-6" x-init="getActualColor()">
         <div>
             <div class="bg-blue-500 w-32 h-32 mt-2" x-text="actualColor"></div>
-            <button @click="getRandomColor()" class="mt-2 border-2 rounded-full p-2 bg-blue-900 text-white">Random Color</button>
-        </div> <!-- 1072612 -->
+            <button @click="getActualColor()" class="mt-2 border-2 rounded-full p-2 bg-blue-900 text-white">Random Color</button>
+        </div>
         <div>
             <!-- con x-bind puedes colocarle un valor a un atributo si se cumple la condicion -->
             <div x-bind:class="{ 'active': cambio }" class="w-32 h-32 mt-2"></div>
@@ -35,9 +34,27 @@
             <div @mouseover="cambiarBg(event)" class="w-32 h-32 mt-2 text-center">Hover para cambiar de color</div>
         </div>
         <div class="flex flex-col items-center rounded">
+            <div :style="`background-color:${colorBgInput};`" class="w-32 h-32 mt-2 text-center">Wololo</div>
             <!-- De esta forma se puede especificar que el evento se activa cuando el usuario presiona enter -->
-            <div id="div-color" :style="`background-color:#D2AFFF;`" class="w-32 h-32 mt-2 text-center">Wololo</div>
-            <input type="text" x-on:keydown.enter="cambiarBgEnter(event)" class="mt-2" placeholder="Color en hexadecimal" >
+            <input type="text" x-on:keydown.enter="cambiarBgEnter(event)" class="mt-2 border" placeholder="Color en hexadecimal" >
+        </div>
+        <div class="flex flex-col items-center rounded" x-init="getColorBgInput2()">
+            <div :style="`background-color:${colorBgInput2};`" class="w-32 h-32 mt-2 text-center" x-text="colorBgInput2"></div>
+            <!-- De esta forma se puede especificar que el evento se activa cuando el usuario presiona enter -->
+            <div>
+                <input x-model="colorBgInput2" type="text" class="mt-2 border" placeholder="Color en hexadecimal" >
+                <!-- Con el debounce.valor le indicamos los valores en milisegundos que debe esperar la
+                variable para refrescar su valor -->
+<!--                 <input x-model.debounce.750="colorBgInput2" type="text" class="mt-2 border" placeholder="Color en hexadecimal" > -->
+                <button title="Presiona para un color aleatorio" @click="getColorBgInput2()">🎲</button>
+            </div>
+        </div>
+        <div class="flex flex-col items-center rounded">
+            <p x-text="parrafo"></p>
+            <!-- Evento que va actualizando el parrafo a medida que el usuario escribe -->
+            <input type="text" x-on:input="actualizarParrafo(event)" class="mt-2 border" placeholder="Escriba un texto" >
+            <!-- Bloqueamos el checkbox -->
+            <input type="checkbox" class="mt-2" x-on:click.prevent>
         </div>
     </div>
 
@@ -47,6 +64,9 @@
             return {
                 colortw: 'bg-blue-500',
                 oldBgColor: 'bg-pink-500',
+                colorBgInput: '#D2AFFF',
+                colorBgInput2: null,
+                parrafo: '',
                 characters: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
                                         'A', 'B', 'C', 'D', 'E', 'F'],
                 actualColor: null,
@@ -59,7 +79,10 @@
                     const rand_position = Math.floor(Math.random()*this.characters.length);
                     return this.characters[rand_position];
                 },
-                getRandomColor: function() {
+                getActualColor: function() {
+                    this.actualColor = this.randomColor;
+                },
+                get randomColor() {
 
                     let colorResult = "#";
 
@@ -67,7 +90,7 @@
                         colorResult += this.pickRandomCharacter();
                     }
 
-                    this.actualColor = colorResult;
+                    return colorResult;
                 },
                 cambiarBgTw: function(event) {
                     const rand_color_position = Math.floor(Math.random()*this.twColors.length);
@@ -83,8 +106,13 @@
                     event.target.classList.add(oldBgColor);
                 },
                 cambiarBgEnter: function(event) {
-                    div_color = document.getElementById('div-color');
-                    div_color.style.backgroundColor = event.target.value;
+                    this.colorBgInput = event.target.value;
+                },
+                actualizarParrafo: function(event) {
+                    this.parrafo = event.target.value;
+                },
+                getColorBgInput2: function() {
+                    this.colorBgInput2 = this.randomColor;
                 }
 
             }

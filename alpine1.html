@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//unpkg.com/alpinejs" defer></script>
     <title>AlpineJS I</title>
@@ -15,13 +14,13 @@
         <button @click=" message = 'Hola Mundo' ">Hola Mundo</button>
         <!-- x-show muestra el elemento dependiendo de una condicion -->
         <!-- x-text sirve como innertext dentro de JS -->
-        <h1 x-show="isOpen" x-text="message" ></h1>
+        <h1 x-show="isOpen" x-text="message" x-transition ></h1>
     </div>
 
     <!-- Para inicializar es recomendable hacerlo en una funcion desde fuera -->
     <!-- x-init se ejecuta cuando inicializa el componente, es ideal para cuando haces
         llamadas a API -->
-    <div x-data="mainComp()" x-init="start()">
+    <div x-data="mainComp" x-init="start">
         <h2 x-text="usuario"></h2>
         <button @click="start">Presionar</button>
     </div>
